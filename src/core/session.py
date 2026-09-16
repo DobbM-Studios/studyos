@@ -13,7 +13,7 @@ def login(username, password):
     }
 
     try:
-        response = requests.post(WORKER, json=payload, timeout=10)
+        response = requests.post(WORKER+"/login", json=payload, timeout=10)
         
         response.raise_for_status()
 
@@ -28,3 +28,4 @@ def login(username, password):
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
         return "error"
+    
