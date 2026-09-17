@@ -19,7 +19,7 @@ def login(username, password):
 
         if response.status_code != 200:
             print(f"Status code {response.status_code}. Error logging in")
-            return "error"
+            return ("","")
         else:
             user = json.loads(response.text)
             return (user["name"], user["token"])
@@ -27,5 +27,27 @@ def login(username, password):
         
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
-        return "error"
-    
+        return ("","")
+
+def register(username, password):
+    payload = {
+        "name": username,
+        "pass": password
+    }
+
+    try:
+        response = requests.post(WORKER+"/register", json=payload, timeout=10)
+        
+        response.raise_for_status()
+
+        if response.status_code != 201:
+            print(f"Status code {response.status_code}. Error registering")
+            return ("","")
+        else:
+            user = json.loads(response.text)
+            return login(username, password)
+
+        
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
+        return ("","")
