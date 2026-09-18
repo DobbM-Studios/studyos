@@ -10,25 +10,25 @@ if ruta_src not in sys.path:
 from core import session
 
 def main(page: ft.Page):
-    page.title = "studyos | login"
+    page.title = "studyos | register"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.theme_mode = ft.ThemeMode.LIGHT
     page.bgcolor = ft.Colors.TRANSPARENT
     page.padding = 0
 
-    bg_path = Path(__file__).resolve().parents[2] / "images" / "bg-0.jpg"
+    bg_path = Path(__file__).resolve().parents[2] / "images" / "bg-1.jpg"
     bg_src = str(bg_path)
     
     title = ft.Text(
-        value="Good to see you again!", 
+        value="Welcome!", 
         size=40, 
         weight=ft.FontWeight.BOLD, 
         color=ft.Colors.BLUE_700
     )
     
     subtitle = ft.Text(
-        value="Introduce your data to continue", 
+        value="Introduce your data to create your account", 
         size=14, 
         color=ft.Colors.GREY_600
     )
@@ -55,8 +55,8 @@ def main(page: ft.Page):
             alert_msg.value = "Please fill all the fields."
             alert_msg.color = ft.Colors.RED_600
         else:
-            session.login(txt_user.value, txt_password.value)
-            alert_msg.value = "Logging in..."
+            session.register(txt_user.value, txt_password.value)
+            alert_msg.value = "Creating account..."
             alert_msg.color = ft.Colors.GREEN_700
         
         page.update()
@@ -64,7 +64,7 @@ def main(page: ft.Page):
     btn_next = ft.Button(
         content=ft.Row(
             controls=[
-                ft.Text("Continue", weight=ft.FontWeight.BOLD),
+                ft.Text("Create account", weight=ft.FontWeight.BOLD),
                 ft.Icon(ft.icons.Icons.ARROW_FORWARD, size=18)
             ],
             alignment=ft.MainAxisAlignment.CENTER,
