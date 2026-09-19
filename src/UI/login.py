@@ -3,13 +3,14 @@ import sys
 from pathlib import Path
 import flet as ft
 
-ruta_src = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-if ruta_src not in sys.path:
-    sys.path.append(ruta_src)
+src_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if src_path not in sys.path:
+    sys.path.append(src_path)
 
 from core import session
 
 def main(page: ft.Page):
+    page.clean()
     page.title = "studyos | login"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
@@ -118,5 +119,3 @@ def main(page: ft.Page):
 
     page.add(login_stack)
 
-if __name__ == "__main__":
-    ft.run(main)
