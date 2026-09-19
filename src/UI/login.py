@@ -56,8 +56,9 @@ def main(page: ft.Page):
             alert_msg.value = "Please fill all the fields."
             alert_msg.color = ft.Colors.RED_600
         else:
-            session.login(txt_user.value, txt_password.value)
             alert_msg.value = "Logging in..."
+            session.login(txt_user.value, txt_password.value)
+            alert_msg.value = "Logged in!"
             alert_msg.color = ft.Colors.GREEN_700
         
         page.update()
