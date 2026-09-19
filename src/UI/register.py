@@ -9,7 +9,7 @@ if src_path not in sys.path:
 
 from core import session
 
-def main(page: ft.Page):
+def main(page: ft.Page, on_success=None):
     page.clean()
     page.title = "studyos | register"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
@@ -20,27 +20,27 @@ def main(page: ft.Page):
 
     bg_path = Path(__file__).resolve().parents[2] / "images" / "bg-1.jpg"
     bg_src = str(bg_path)
-    
+
     title = ft.Text(
-        value="Welcome!", 
-        size=40, 
-        weight=ft.FontWeight.BOLD, 
+        value="Welcome!",
+        size=40,
+        weight=ft.FontWeight.BOLD,
         color=ft.Colors.BLUE_700
     )
-    
+
     subtitle = ft.Text(
-        value="Introduce your data to create your account", 
-        size=14, 
+        value="Introduce your data to create your account",
+        size=14,
         color=ft.Colors.GREY_600
     )
-    
+
     txt_user = ft.TextField(
         label="Username",
         hint_text="MyUsername",
         prefix_icon=ft.icons.Icons.PERSON_PIN,
         width=300
     )
-    
+
     txt_password = ft.TextField(
         label="Password",
         prefix_icon=ft.icons.Icons.LOCK,
@@ -48,20 +48,34 @@ def main(page: ft.Page):
         can_reveal_password=True,
         width=300
     )
-    
+
     alert_msg = ft.Text(value="", color=ft.Colors.RED_600, size=12)
 
     def login_click(e):
         if not txt_user.value or not txt_password.value:
             alert_msg.value = "Please fill all the fields."
             alert_msg.color = ft.Colors.RED_600
-        else:
-            alert_msg.value = "Creating account..."
-            session.register(txt_user.value, txt_password.value)
+            page.update()
+            return None
+
+        alert_msg.value = "Creating account..."
+        alert_msg.color = ft.Colors.BLUE_700
+        page.update()
+
+        result = session.register(txt_user.value, txt_password.value)
+
+        if isinstance(result, tuple) and len(result) >= 2 and result[0] and result[1]:
             alert_msg.value = "Account created!"
             alert_msg.color = ft.Colors.GREEN_700
-        
+            page.update()
+            if on_success is not None:
+                on_success(result)
+            return result
+
+        alert_msg.value = "Could not create the account."
+        alert_msg.color = ft.Colors.RED_600
         page.update()
+        return result
 
     btn_next = ft.Button(
         content=ft.Row(
@@ -80,7 +94,6 @@ def main(page: ft.Page):
         ),
         on_click=login_click
     )
-
 
     form_container = ft.Column(
         controls=[
@@ -119,4 +132,5 @@ def main(page: ft.Page):
     )
 
     page.add(login_stack)
+    return None
 

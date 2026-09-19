@@ -1,0 +1,12 @@
+{
+    "jobs": [
+        {
+            "compiler": "python",
+            "id": "run",
+            "flags": [],
+            "input": "src/main.py",
+            "output": "",
+            "outputSymbol": ""
+        }
+    ]
+}

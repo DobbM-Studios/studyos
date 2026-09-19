@@ -1,11 +1,11 @@
-from UI import login, register
+from UI import login, register, menu
 import flet as ft
 from pathlib import Path
 
 
 def main(page: ft.Page):
     page.clean()
-    page.title = "studyos | main"
+    page.title = "studyos | landing"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.theme_mode = ft.ThemeMode.LIGHT
@@ -37,7 +37,7 @@ def main(page: ft.Page):
         style=ft.ButtonStyle(
             shape=ft.RoundedRectangleBorder(radius=8),
         ),
-        on_click=lambda e: login.main(page),
+        on_click=lambda e: do_login(),
     )
 
     btn_register = ft.Button(
@@ -58,7 +58,7 @@ def main(page: ft.Page):
             color=ft.Colors.WHITE,
             overlay_color=ft.Colors.BLUE_900,
         ),
-        on_click=lambda e: register.main(page),
+        on_click=lambda e: do_register(),
     )
 
     content = ft.Column(
@@ -95,6 +95,32 @@ def main(page: ft.Page):
     page.on_resize = resize_root
     page.add(root)
 
+
+    def save_session(result):
+        global USERNAME, SESSION_TOKEN
+        try:
+            if isinstance(result, (tuple, list)) and len(result) >= 2:
+                USERNAME, SESSION_TOKEN = result[0], result[1]
+                return True
+        except Exception:
+            pass
+
+        USERNAME, SESSION_TOKEN = (None, None)
+        return False
+
+    def do_login():
+        def handle_success(result):
+            if save_session(result):
+                menu.main(page)
+
+        login.main(page, on_success=handle_success)
+
+    def do_register():
+        def handle_success(result):
+            if save_session(result):
+                menu.main(page)
+
+        register.main(page, on_success=handle_success)
 
 if __name__ == "__main__":
     ft.run(main)
