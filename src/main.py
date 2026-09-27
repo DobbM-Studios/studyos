@@ -24,7 +24,7 @@ def main(page: ft.Page):
 
     btn_login = ft.Button(
         content=ft.Row(
-            controls=[
+            [
                 ft.Text("Login", weight=ft.FontWeight.BOLD),
                 ft.Icon(ft.icons.Icons.ARROW_FORWARD, size=18),
             ],
@@ -42,7 +42,7 @@ def main(page: ft.Page):
 
     btn_register = ft.Button(
         content=ft.Row(
-            controls=[
+            [
                 ft.Text("Create account", weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE),
                 ft.Icon(ft.icons.Icons.CIRCLE, size=18, color=ft.Colors.WHITE),
             ],
@@ -81,8 +81,8 @@ def main(page: ft.Page):
     )
 
     root = ft.Stack(
+        [background, overlay],
         expand=True,
-        controls=[background, overlay],
     )
 
     def resize_root(_):
