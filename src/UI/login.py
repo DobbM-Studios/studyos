@@ -29,14 +29,14 @@ def main(page: ft.Page, on_success=None):
     )
 
     subtitle = ft.Text(
-        value="Introduce your data to continue",
+        value="Fill out the fields below to log in",
         size=14,
         color=ft.Colors.GREY_600
     )
 
     txt_user = ft.TextField(
         label="Username",
-        hint_text="MyUsername",
+        hint_text="awkwardDuck1704",
         prefix_icon=ft.icons.Icons.PERSON_PIN,
         width=300
     )
@@ -49,20 +49,52 @@ def main(page: ft.Page, on_success=None):
         width=300
     )
 
-    alert_msg = ft.Text(value="", color=ft.Colors.RED_600, size=12)
+    alert_msg = ft.Text(
+        value="", 
+        color=ft.Colors.RED_600, 
+        size=12
+    )
+
+    # returns true if the length of the given field is over eight characters and returns false otherwise.
+    def verify_length(field):
+        if len(field) < 8:
+            return False
+        else:
+            return True
+
+    # changes the alert_msg element's value to the given message.
+    # displays the given message in red text.
+    def alert(message):
+        alert_msg.value = message
+        alert_msg.color = ft.Colors.RED_600 # is this even needed if the elements color is this by default?
+        page.update()
 
     def login_click(e):
-        if not txt_user.value or not txt_password.value:
-            alert_msg.value = "Please fill all the fields."
-            alert_msg.color = ft.Colors.RED_600
-            page.update()
+        stripped_user = txt_user.value.strip()
+        stripped_password = txt_password.strip()
+
+        if not stripped_user:
+            alert("Please fill in the username field.")
             return None
+        
+        if not stripped_password:
+            alert("Please fill in the password field.")
+            return None
+
+        if verify_length(stripped_user) == False:
+            alert("")
+            return None
+
+        if verify_length(stripped_user) == False:
+            alert("")
+            return None
+
 
         alert_msg.value = "Logging in..."
         alert_msg.color = ft.Colors.BLUE_700
         page.update()
 
-        result = session.login(txt_user.value, txt_password.value)
+        result = session.login(stripped_user, stripped_password)
 
         if isinstance(result, tuple) and len(result) >= 2 and result[0] and result[1]:
             alert_msg.value = "Logged in!"
@@ -72,9 +104,7 @@ def main(page: ft.Page, on_success=None):
                 on_success(result)
             return result
 
-        alert_msg.value = "Invalid username or password."
-        alert_msg.color = ft.Colors.RED_600
-        page.update()
+        alert("Invalid username or password.")
         return result
 
     btn_next = ft.Button(

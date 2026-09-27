@@ -14,7 +14,7 @@ USERNAME, TOKEN = "", ""
 
 def main(page: ft.Page):
     page.clean()
-    page.title = "studyos | register"
+    page.title = "StudyOS | register"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.theme_mode = ft.ThemeMode.LIGHT

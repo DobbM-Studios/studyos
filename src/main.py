@@ -5,7 +5,7 @@ from pathlib import Path
 
 def main(page: ft.Page):
     page.clean()
-    page.title = "studyos | landing"
+    page.title = "StudyOS | landing"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.theme_mode = ft.ThemeMode.LIGHT
