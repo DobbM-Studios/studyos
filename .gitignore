@@ -98,3 +98,5 @@ tempCodeRunnerFile.py
 
 # PyPI configuration file
 .pypirc
+
+__pycache__/
