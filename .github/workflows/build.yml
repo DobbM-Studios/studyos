@@ -5,6 +5,8 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+  release:
+    types: [ published ]
   workflow_dispatch:
 
 permissions:
@@ -23,61 +25,70 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # -------- Desktop --------
+          # -------- Desktop (always) --------
           - name: linux
             runner: ubuntu-latest
             build_cmd: "flet build linux src"
             artifact_path: src/build/linux
             needs_linux_deps: true
+            is_mobile_web: false
 
           - name: macos
             runner: macos-latest
             build_cmd: "flet build macos src"
             artifact_path: src/build/macos
             needs_linux_deps: false
+            is_mobile_web: false
 
           - name: windows
             runner: windows-latest
             build_cmd: "flet build windows src"
             artifact_path: src/build/windows
             needs_linux_deps: false
+            is_mobile_web: false
 
-          # -------- Android --------
+          # -------- Android (release only) --------
           - name: aab
             runner: ubuntu-latest
             build_cmd: "flet build aab src"
             artifact_path: src/build/aab
             needs_linux_deps: false
+            is_mobile_web: true
 
           - name: apk
             runner: ubuntu-latest
             build_cmd: "flet build apk src"
             artifact_path: src/build/apk
             needs_linux_deps: false
+            is_mobile_web: true
 
-          # -------- iOS --------
+          # -------- iOS (release only) --------
           - name: ipa
             runner: macos-latest
             build_cmd: "flet build ipa src"
             artifact_path: src/build/ipa
             needs_linux_deps: false
+            is_mobile_web: true
 
-          # -------- Web --------
+          # -------- Web (release only) --------
           - name: web
             runner: ubuntu-latest
             build_cmd: "flet build web src"
             artifact_path: src/build/web
             needs_linux_deps: false
+            is_mobile_web: true
 
     steps:
       - name: Checkout repository
+        if: matrix.is_mobile_web == false || (github.event_name == 'release' && github.event.action == 'published') || github.event_name == 'workflow_dispatch'
         uses: actions/checkout@v4
 
       - name: Setup uv
+        if: matrix.is_mobile_web == false || (github.event_name == 'release' && github.event.action == 'published') || github.event_name == 'workflow_dispatch'
         uses: astral-sh/setup-uv@v6
 
       - name: Install Linux dependencies
-        if: matrix.needs_linux_deps
+        if: matrix.needs_linux_deps && (matrix.is_mobile_web == false || (github.event_name == 'release' && github.event.action == 'published') || github.event_name == 'workflow_dispatch')
         shell: bash
         env:
           WORKER: ${{ secrets.WORKER }} 
@@ -92,12 +103,13 @@ jobs:
           sudo apt-get clean
 
       - name: Build app
+        if: matrix.is_mobile_web == false || (github.event_name == 'release' && github.event.action == 'published') || github.event_name == 'workflow_dispatch'
         shell: bash
         run: |
-          # Se inyecta requirements.txt de forma nativa y aislada para cada SO
           uv run --with-requirements requirements.txt ${{ matrix.build_cmd }} --yes --verbose
 
       - name: Upload Artifact
+        if: matrix.is_mobile_web == false || (github.event_name == 'release' && github.event.action == 'published') || github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.name }}-build-artifact
