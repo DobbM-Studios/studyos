@@ -7,32 +7,38 @@ try:
     from dotenv import load_dotenv
     load_dotenv()
 except ImportError:
-    pass
+    pass # nosec
 
 WORKER = os.environ.get("WORKER", "")
 
 def _post(endpoint, payload):
     if not payload.get("name") and not payload.get("user"):
         return 400, "{}"
-    
+
     data = json.dumps(payload).encode("utf-8")
+
+    full_url = f"{WORKER}{endpoint}"
+
+    if not full_url.startswith(("http://", "https://")):
+        return 500, "{}"
+
     req = urllib.request.Request(
-        f"{WORKER}{endpoint}",
+        full_url,
         data=data,
         headers={
             "Content-Type": "application/json",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
         },
-        method="POST"
+        method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=10) as res:
+        with urllib.request.urlopen(req, timeout=10) as res:  # nosec
             return res.getcode(), res.read().decode("utf-8")
     except urllib.error.HTTPError as e:
         return e.code, e.read().decode("utf-8") if e.fp else "{}"
     except Exception:
         return 500, "{}"
-
+    
 def login(username, password):
     payload = {"name": username, "pass": password}
     code, text = _post("/login", payload)
