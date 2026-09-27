@@ -10,7 +10,6 @@ jobs:
   security-scan:
     runs-on: ubuntu-latest
     steps:
-      # 1. Descarga el código de tu repositorio
       - name: Checkout repository
         uses: actions/checkout@v4
 
