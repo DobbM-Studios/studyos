@@ -6,7 +6,7 @@ import urllib.error
 try:
     from dotenv import load_dotenv
     load_dotenv()
-except ImportError:
+except ImportError: # nosec
     pass # nosec
 
 WORKER = os.environ.get("WORKER", "")
