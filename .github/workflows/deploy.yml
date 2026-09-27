@@ -24,6 +24,8 @@ jobs:
   build:
     name: Build web app
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
