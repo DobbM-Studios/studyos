@@ -11,7 +11,7 @@ from core import session
 
 def main(page: ft.Page, on_success=None):
     page.clean()
-    page.title = "studyos | register"
+    page.title = "StudyOS | register"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
     page.theme_mode = ft.ThemeMode.LIGHT
@@ -22,14 +22,14 @@ def main(page: ft.Page, on_success=None):
     bg_src = str(bg_path)
 
     title = ft.Text(
-        value="Welcome!",
+        value="Welcome to StudyOS!",
         size=40,
         weight=ft.FontWeight.BOLD,
         color=ft.Colors.BLUE_700
     )
 
     subtitle = ft.Text(
-        value="Introduce your data to create your account",
+        value="Fill in the fields below to register",
         size=14,
         color=ft.Colors.GREY_600
     )
@@ -49,13 +49,38 @@ def main(page: ft.Page, on_success=None):
         width=300
     )
 
-    alert_msg = ft.Text(value="", color=ft.Colors.RED_600, size=12)
+    alert_msg = ft.Text(
+        value="", 
+        color=ft.Colors.RED_600, 
+        size=12
+    )
+
+    # this only performs a length check; it checks if the password is atleast eight characters
+    # Obviously we aren't going to do anything too serious and in-depth here.
+    def verify_password(password):
+        if len(password) < 8:
+            return False
+        else:
+            return True
+
+    # changes the alert_msg element's value to the given message.
+    # displays the given message in red text.
+    def alert(message):
+        alert_msg.value = message
+        alert_msg.color = ft.Colors.RED_600
+        page.update()
 
     def login_click(e):
-        if not txt_user.value or not txt_password.value:
-            alert_msg.value = "Please fill all the fields."
-            alert_msg.color = ft.Colors.RED_600
-            page.update()
+        if not txt_user.value:
+            alert("Please fill in the username field.")
+            return None
+
+        if not txt_password.value:
+            alert("Please fill in the password field.")
+            return None
+
+        if verify_password(txt_password.value) == False:
+            alert("Your password must be at least eight characters.")
             return None
 
         alert_msg.value = "Creating account..."
@@ -72,7 +97,7 @@ def main(page: ft.Page, on_success=None):
                 on_success(result)
             return result
 
-        alert_msg.value = "Could not create the account."
+        alert_msg.value = "Something went wrong. We couldn't create your account at this time."
         alert_msg.color = ft.Colors.RED_600
         page.update()
         return result

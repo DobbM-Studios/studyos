@@ -12,7 +12,7 @@ except ImportError:
 WORKER = os.environ.get("WORKER", "")
 
 def _post(endpoint, payload):
-    if not payload or not payload.get("name") and not payload.get("user"):
+    if not payload.get("name") and not payload.get("user"):
         return 400, "{}"
     
     data = json.dumps(payload).encode("utf-8")
@@ -36,18 +36,22 @@ def _post(endpoint, payload):
 def login(username, password):
     payload = {"name": username, "pass": password}
     code, text = _post("/login", payload)
+
     if code != 200:
         print(f"Status code {code}. Error logging in")
         return "", ""
+    
     user = json.loads(text)
     return user["name"], user["token"]
 
 def register(username, password):
     payload = {"name": username, "pass": password}
     code, text = _post("/register", payload)
+
     if code != 201:
         print(f"Status code {code}. Error registering")
         return "", ""
+    
     return login(username, password)
 
 def logout(username, token):
