@@ -22,7 +22,7 @@ def main(page: ft.Page, on_success=None):
     bg_src = str(bg_path)
 
     title = ft.Text(
-        value="Good to see you again!",
+        "Good to see you again!",
         size=40,
         weight=ft.FontWeight.BOLD,
         color=ft.Colors.BLUE_700
@@ -71,12 +71,12 @@ def main(page: ft.Page, on_success=None):
 
     def login_click(e):
         stripped_user = txt_user.value.strip()
-        stripped_password = txt_password.strip()
+        stripped_password = txt_password.value.strip()
 
         if not stripped_user:
             alert("Please fill in the username field.")
             return None
-        
+
         if not stripped_password:
             alert("Please fill in the password field.")
             return None
@@ -85,10 +85,9 @@ def main(page: ft.Page, on_success=None):
             alert("")
             return None
 
-        if verify_length(stripped_user) == False:
-            alert("")
+        if verify_length(stripped_password) == False:
+            alert("Your password must be at least eight characters.")
             return None
-
 
         alert_msg.value = "Logging in..."
         alert_msg.color = ft.Colors.BLUE_700
@@ -109,7 +108,7 @@ def main(page: ft.Page, on_success=None):
 
     btn_next = ft.Button(
         content=ft.Row(
-            controls=[
+            [
                 ft.Text("Continue", weight=ft.FontWeight.BOLD),
                 ft.Icon(ft.icons.Icons.ARROW_FORWARD, size=18)
             ],
@@ -126,7 +125,7 @@ def main(page: ft.Page, on_success=None):
     )
 
     form_container = ft.Column(
-        controls=[
+        [
             title,
             subtitle,
             ft.Container(height=10),
@@ -149,8 +148,7 @@ def main(page: ft.Page, on_success=None):
     )
 
     login_stack = ft.Stack(
-        expand=True,
-        controls=[
+        [
             background_image,
             ft.Container(
                 content=form_container,
@@ -158,7 +156,8 @@ def main(page: ft.Page, on_success=None):
                 padding=ft.padding.Padding.all(30),
                 expand=True,
             )
-        ]
+        ],
+        expand=True,
     )
 
     page.add(login_stack)
