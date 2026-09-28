@@ -44,7 +44,7 @@ def login(username, password):
     code, text = _post("/login", payload)
 
     if code != 200:
-        print(f"Status code {code}. Error logging in ({json.loads(text)})")
+        print(f"Status code {code}. Error logging in ({str(json.loads(text))})")
         return "", ""
     
     user = json.loads(text)
@@ -55,7 +55,7 @@ def register(username, password):
     code, text = _post("/register", payload)
 
     if code != 201:
-        print(f"Status code {code}. Error registering ({json.loads(text)})")
+        print(f"Status code {code}. Error registering ({str(json.loads(text))})")
         return "", ""
         
     return login(username, password)
