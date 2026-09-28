@@ -8,6 +8,7 @@ if src_path not in sys.path:
     sys.path.append(src_path)
 
 from core import session
+from core.image_utils import get_image_src
 
 def main(page: ft.Page, on_success=None):
     page.clean()
@@ -18,7 +19,7 @@ def main(page: ft.Page, on_success=None):
     page.bgcolor = ft.Colors.TRANSPARENT
     page.padding = 0
 
-    bg_src = "/bg-0.png"
+    bg_src = get_image_src("bg-0.png")
 
     title = ft.Text(
         "Good to see you again!",

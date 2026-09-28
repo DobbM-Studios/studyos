@@ -1,12 +1,8 @@
 from UI import login, register, menu
 import flet as ft
-from pathlib import Path
 
-BASE_DIR = (
-    Path(__file__).resolve().parent.parent
-    if Path(__file__).resolve().parent.name == "src"
-    else Path(__file__).resolve().parent
-)
+from core.image_utils import BASE_DIR, get_image_src
+
 IMAGES_DIR = str(BASE_DIR / "images")
 
 def main(page: ft.Page):
@@ -18,7 +14,7 @@ def main(page: ft.Page):
     page.bgcolor = ft.Colors.TRANSPARENT
     page.padding = 0
 
-    bg_src = "bg-0.jpg"
+    bg_src = get_image_src("bg-0.jpg")
 
     title = ft.Text(
         value="Welcome to StudyOS",
