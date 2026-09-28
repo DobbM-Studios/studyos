@@ -25,6 +25,13 @@ def _post(endpoint, payload):
 
     full_url = f"{WORKER}{endpoint}"
 
+    endpoint = endpoint.lstrip("/")
+    
+    if not endpoint.startswith("api/"):
+        endpoint = f"api/{endpoint}"
+
+    full_url = f"{WORKER}/{endpoint}/"
+
     if not full_url.startswith(("http://", "https://")):
         return 500, "{}"
 
