@@ -11,17 +11,40 @@ except ImportError: # nosec
 
 WORKER = os.environ.get("WORKER", "")
 
+import sys
+
+IS_WEB = sys.platform == "emscripten"
+
+if IS_WEB:
+    from pyodide.http import pyfetch
+    import asyncio
+
 def _post(endpoint, payload):
     if not payload.get("name") and not payload.get("user"):
         return 400, "{}"
-
-    data = json.dumps(payload).encode("utf-8")
 
     full_url = f"{WORKER}{endpoint}"
 
     if not full_url.startswith(("http://", "https://")):
         return 500, "{}"
 
+    if IS_WEB:
+        async def _async_post():
+            try:
+                response = await pyfetch(
+                    full_url,
+                    method="POST",
+                    headers={"Content-Type": "application/json"},
+                    body=json.dumps(payload)
+                )
+                text = await response.string()
+                return response.status, text
+            except Exception:
+                return 500, "{}"
+
+        return asyncio.run(_async_post())
+
+    data = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(
         full_url,
         data=data,
@@ -32,7 +55,7 @@ def _post(endpoint, payload):
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=10) as res:  # nosec
+        with urllib.request.urlopen(req, timeout=10) as res:
             return res.getcode(), res.read().decode("utf-8")
     except urllib.error.HTTPError as e:
         return e.code, e.read().decode("utf-8") if e.fp else "{}"
@@ -44,7 +67,7 @@ def login(username, password):
     code, text = _post("/login", payload)
 
     if code != 200:
-        print(f"Status code {code}. Error logging in ({str(json.loads(text))})")
+        print(f"Status code {code}. Error logging in")
         return "", ""
     
     user = json.loads(text)
@@ -55,7 +78,7 @@ def register(username, password):
     code, text = _post("/register", payload)
 
     if code != 201:
-        print(f"Status code {code}. Error registering ({str(json.loads(text))})")
+        print(f"Status code {code}. Error registering")
         return "", ""
         
     return login(username, password)
