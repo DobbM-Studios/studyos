@@ -18,8 +18,7 @@ def main(page: ft.Page, on_success=None):
     page.bgcolor = ft.Colors.TRANSPARENT
     page.padding = 0
 
-    bg_path = Path(__file__).resolve().parents[2] / "images" / "bg-0.jpg"
-    bg_src = str(bg_path)
+    bg_src = "/bg-0.png"
 
     title = ft.Text(
         "Good to see you again!",
@@ -57,10 +56,7 @@ def main(page: ft.Page, on_success=None):
 
     # returns true if the length of the given field is over eight characters and returns false otherwise.
     def verify_length(field):
-        if len(field) < 8:
-            return False
-        else:
-            return True
+        return len(field) < 8
 
     # changes the alert_msg element's value to the given message.
     # displays the given message in red text.

@@ -12,8 +12,7 @@ def main(page: ft.Page):
     page.bgcolor = ft.Colors.TRANSPARENT
     page.padding = 0
 
-    bg_path = Path(__file__).resolve().parents[1] / "images" / "bg-0.jpg"
-    bg_src = str(bg_path)
+    bg_src = "/bg-0.jpg"
 
     title = ft.Text(
         value="Welcome to StudyOS",
@@ -127,4 +126,4 @@ def main(page: ft.Page):
         register.main(page, on_success=handle_success)
 
 if __name__ == "__main__":
-    ft.run(main)
+    ft.run(main, assets_dir="../images")

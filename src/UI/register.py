@@ -18,8 +18,7 @@ def main(page: ft.Page, on_success=None):
     page.bgcolor = ft.Colors.TRANSPARENT
     page.padding = 0
 
-    bg_path = Path(__file__).resolve().parents[2] / "images" / "bg-1.jpg"
-    bg_src = str(bg_path)
+    bg_src = "/bg-1.jpg"
 
     title = ft.Text(
         value="Welcome to StudyOS!",
