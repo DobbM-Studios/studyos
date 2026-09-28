@@ -46,6 +46,8 @@ def login(username, password):
     if code != 200:
         print(f"Status code {code}. Error logging in")
         return "", ""
+    elif code == 500:
+        print(f"Error: {json.loads(text)["error"]}")
     
     user = json.loads(text)
     return user["name"], user["token"]
@@ -57,6 +59,8 @@ def register(username, password):
     if code != 201:
         print(f"Status code {code}. Error registering")
         return "", ""
+    elif code == 500:
+        print(f"Error: {json.loads(text)["error"]}")
     
     return login(username, password)
 
