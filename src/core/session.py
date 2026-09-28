@@ -16,7 +16,7 @@ import sys
 IS_WEB = sys.platform == "emscripten"
 
 if IS_WEB:
-    from pyodide.http import pyfetch
+    from pyodide.http import pyfetch # type: ignore as this is only for the web which automatically has that: for desktop it isnt needed
     import asyncio
 
 def _post(endpoint, payload):
@@ -34,7 +34,10 @@ def _post(endpoint, payload):
                 response = await pyfetch(
                     full_url,
                     method="POST",
-                    headers={"Content-Type": "application/json"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+                    },
                     body=json.dumps(payload)
                 )
                 text = await response.string()
