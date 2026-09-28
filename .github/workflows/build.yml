@@ -21,11 +21,6 @@ jobs:
   build:
     name: Build ${{ matrix.name }}
     runs-on: ${{ matrix.runner }}
-    # Skip only mobile platforms unless it's a release or manual trigger
-    if: |
-      matrix.is_mobile == false ||
-      github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'release' && github.event.action == 'published')
     strategy:
       fail-fast: false
       matrix:
@@ -85,13 +80,26 @@ jobs:
 
     steps:
       - name: Checkout repository
+        if: |
+          matrix.is_mobile == false ||
+          github.event_name == 'workflow_dispatch' ||
+          (github.event_name == 'release' && github.event.action == 'published')
         uses: actions/checkout@v4
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@v6
+        if: |
+          matrix.is_mobile == false ||
+          github.event_name == 'workflow_dispatch' ||
+          (github.event_name == 'release' && github.event.action == 'published')
+        uses: actions/setup-uv@v6
 
       - name: Install Linux dependencies
-        if: matrix.needs_linux_deps
+        if: |
+          matrix.needs_linux_deps && (
+            matrix.is_mobile == false ||
+            github.event_name == 'workflow_dispatch' ||
+            (github.event_name == 'release' && github.event.action == 'published')
+          )
         shell: bash
         env:
           WORKER: ${{ secrets.WORKER }} 
@@ -106,11 +114,19 @@ jobs:
           sudo apt-get clean
 
       - name: Build app
+        if: |
+          matrix.is_mobile == false ||
+          github.event_name == 'workflow_dispatch' ||
+          (github.event_name == 'release' && github.event.action == 'published')
         shell: bash
         run: |
           uv run --with-requirements requirements.txt ${{ matrix.build_cmd }} --yes --verbose
 
       - name: Upload Artifact
+        if: |
+          matrix.is_mobile == false ||
+          github.event_name == 'workflow_dispatch' ||
+          (github.event_name == 'release' && github.event.action == 'published')
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.name }}-build-artifact
