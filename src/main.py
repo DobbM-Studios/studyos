@@ -31,7 +31,7 @@ def main(page: ft.Page):
         content=ft.Row(
             [
                 ft.Text("Login", weight=ft.FontWeight.BOLD),
-                ft.Icon(ft.icons.Icons.ARROW_FORWARD, size=18),
+                ft.Icon(ft.icons.Icons.KEY, size=18),
             ],
             alignment=ft.MainAxisAlignment.CENTER,
             spacing=10,
@@ -49,7 +49,7 @@ def main(page: ft.Page):
         content=ft.Row(
             [
                 ft.Text("Create account", weight=ft.FontWeight.BOLD, color=ft.Colors.WHITE),
-                ft.Icon(ft.icons.Icons.CIRCLE, size=18, color=ft.Colors.WHITE),
+                ft.Icon(ft.icons.Icons.ARROW_FORWARD, size=18, color=ft.Colors.WHITE),
             ],
             alignment=ft.MainAxisAlignment.CENTER,
             spacing=10,

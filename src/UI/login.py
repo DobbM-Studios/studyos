@@ -77,11 +77,11 @@ def main(page: ft.Page, on_success=None):
             alert("Please fill in the password field.")
             return None
 
-        if verify_length(stripped_user) == False:
+        if not verify_length(stripped_user):
             alert("")
             return None
 
-        if verify_length(stripped_password) == False:
+        if not verify_length(stripped_password):
             alert("Your password must be at least eight characters.")
             return None
 
