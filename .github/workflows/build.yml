@@ -21,9 +21,9 @@ jobs:
   build:
     name: Build ${{ matrix.name }}
     runs-on: ${{ matrix.runner }}
-    # Skip mobile/web jobs unless it's a release or manual workflow_dispatch
+    # Skip only mobile platforms unless it's a release or manual trigger
     if: |
-      matrix.is_mobile_web == false ||
+      matrix.is_mobile == false ||
       github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'release' && github.event.action == 'published')
     strategy:
@@ -36,21 +36,29 @@ jobs:
             build_cmd: "flet build linux src"
             artifact_path: src/build/linux
             needs_linux_deps: true
-            is_mobile_web: false
+            is_mobile: false
 
           - name: macos
             runner: macos-latest
             build_cmd: "flet build macos src"
             artifact_path: src/build/macos
             needs_linux_deps: false
-            is_mobile_web: false
+            is_mobile: false
 
           - name: windows
             runner: windows-latest
             build_cmd: "flet build windows src"
             artifact_path: src/build/windows
             needs_linux_deps: false
-            is_mobile_web: false
+            is_mobile: false
+
+          # -------- Web (always) --------
+          - name: web
+            runner: ubuntu-latest
+            build_cmd: "flet build web src"
+            artifact_path: src/build/web
+            needs_linux_deps: false
+            is_mobile: false
 
           # -------- Android (release only) --------
           - name: aab
@@ -58,14 +66,14 @@ jobs:
             build_cmd: "flet build aab src"
             artifact_path: src/build/aab
             needs_linux_deps: false
-            is_mobile_web: true
+            is_mobile: true
 
           - name: apk
             runner: ubuntu-latest
             build_cmd: "flet build apk src"
             artifact_path: src/build/apk
             needs_linux_deps: false
-            is_mobile_web: true
+            is_mobile: true
 
           # -------- iOS (release only) --------
           - name: ipa
@@ -73,15 +81,7 @@ jobs:
             build_cmd: "flet build ipa src"
             artifact_path: src/build/ipa
             needs_linux_deps: false
-            is_mobile_web: true
-
-          # -------- Web (release only) --------
-          - name: web
-            runner: ubuntu-latest
-            build_cmd: "flet build web src"
-            artifact_path: src/build/web
-            needs_linux_deps: false
-            is_mobile_web: true
+            is_mobile: true
 
     steps:
       - name: Checkout repository
