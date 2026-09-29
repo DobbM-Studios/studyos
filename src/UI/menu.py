@@ -80,4 +80,3 @@ def main(page: ft.Page):
     )
 
     page.add(login_stack)
-

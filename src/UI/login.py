@@ -10,7 +10,7 @@ if src_path not in sys.path:
 from core import session
 from core.image_utils import get_image_src
 
-def main(page: ft.Page, on_success=None):
+def main(page: ft.Page, on_success=None, on_cancel=None):
     page.clean()
     page.title = "studyos | login"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
@@ -104,6 +104,10 @@ def main(page: ft.Page, on_success=None):
         alert("Invalid username or password.")
         return result
 
+    def cancel_click(_e):
+        if on_cancel is not None:
+            on_cancel()
+
     btn_next = ft.Button(
         content=ft.Row(
             [
@@ -122,6 +126,25 @@ def main(page: ft.Page, on_success=None):
         on_click=login_click
     )
 
+    btn_cancel = ft.Button(
+        content=ft.Row(
+            [
+                ft.Text("Go Back", weight=ft.FontWeight.BOLD),
+                ft.Icon(ft.icons.Icons.ARROW_BACK, size=18)
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            spacing=10
+        ),
+        width=300,
+        height=45,
+        elevation=2,
+        style=ft.ButtonStyle(
+            shape=ft.RoundedRectangleBorder(radius=8),
+            color=ft.Colors.RED_600
+        ),
+        on_click=cancel_click
+    )
+
     form_container = ft.Column(
         [
             title,
@@ -131,7 +154,8 @@ def main(page: ft.Page, on_success=None):
             txt_password,
             alert_msg,
             ft.Container(height=15),
-            btn_next
+            btn_next,
+            btn_cancel
         ],
         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         spacing=15
@@ -160,4 +184,3 @@ def main(page: ft.Page, on_success=None):
 
     page.add(login_stack)
     return None
-

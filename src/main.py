@@ -118,14 +118,14 @@ def main(page: ft.Page):
             if save_session(result):
                 menu.main(page)
 
-        login.main(page, on_success=handle_success)
+        login.main(page, on_success=handle_success, on_cancel=lambda: main(page))
 
     def do_register():
         def handle_success(result):
             if save_session(result):
                 menu.main(page)
 
-        register.main(page, on_success=handle_success)
+        register.main(page, on_success=handle_success, on_cancel=lambda: main(page))
 
 if __name__ == "__main__":
     ft.run(main, assets_dir=IMAGES_DIR)
