@@ -57,8 +57,9 @@ def main(page: ft.Page, on_success=None):
 
     # this only performs a length check; it checks if the password is atleast eight characters
     # Obviously we aren't going to do anything too serious and in-depth here.
-    def verify_password(password):
-        return len(password) < 8
+    def verify_password(f: str) -> bool:
+        return len(f) > 8
+
 
     # changes the alert_msg element's value to the given message.
     # displays the given message in red text.

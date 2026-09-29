@@ -56,8 +56,9 @@ def main(page: ft.Page, on_success=None):
     )
 
     # returns true if the length of the given field is over eight characters and returns false otherwise.
-    def verify_length(field):
-        return len(field) < 8
+    def verify_length(f: str) -> bool:
+        return len(f) > 8
+
 
     # changes the alert_msg element's value to the given message.
     # displays the given message in red text.
