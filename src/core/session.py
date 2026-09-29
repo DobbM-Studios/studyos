@@ -96,3 +96,13 @@ def register(username, password):
 def logout(username, token):
     payload = {"user": username, "token": token}
     _post("/logout", payload)
+
+def change_password(username, old, new, token):
+    payload = {
+        "name": username,
+        "user": username,
+        "old": old,
+        "new": new,
+        "token": token,
+    }
+    return _post("/change_pw", payload)
