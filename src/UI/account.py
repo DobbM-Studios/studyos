@@ -15,6 +15,7 @@ USERNAME, TOKEN = "", ""
 
 def main(page: ft.Page):
     page.clean()
+    page.title = "StudyOS | account"
     bg_src = get_image_src("bg-0.jpg")
 
     background_image = ft.Image(
