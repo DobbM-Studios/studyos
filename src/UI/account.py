@@ -159,7 +159,7 @@ def main(page: ft.Page):
             new_input,
             change_password,
             change_password_status,
-            change_password,
+            logout,
             btn_cancel
         ],
         alignment=ft.MainAxisAlignment.CENTER,
