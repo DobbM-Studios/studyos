@@ -25,7 +25,7 @@ def main(page: ft.Page):
 
     btn_login = ft.Button(
         content=ft.Row(
-            [
+            controls=[
                 ft.Text("Login", weight=ft.FontWeight.BOLD),
                 ft.Icon(ft.icons.Icons.KEY, size=18),
             ],
